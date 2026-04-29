@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PK Health Gear · Mayo Clinic Storefront — Live Preview</title>
+  <meta name="description" content="A future-state preview of the Mayo Clinic storefront analytics dashboard. Synthetic data, real schema.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<main class="shell">
+
+  <!-- ============ Masthead ============ -->
+  <header class="masthead">
+    <div class="masthead-left">
+      <div class="brandmark">
+        PK Health Gear <em>×</em> Mayo Clinic
+      </div>
+      <div class="tagline">Storefront analytics · live preview</div>
+    </div>
+    <div class="masthead-right">
+      <span class="tag">Synthetic data</span>
+      <span class="tag">Schema-faithful</span>
+      <span class="updated">Last refresh <span id="last-refresh">—</span> · 30-day window</span>
+    </div>
+  </header>
+
+  <!-- ============ KPI strip ============ -->
+  <section class="kpi-strip" aria-label="Top-line metrics">
+    <div class="kpi">
+      <div class="label">Sessions · 30 days</div>
+      <div class="value" data-counter data-target="0">0</div>
+      <div class="sub">vs. prior 30d <span class="delta" id="d-sessions">+0%</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">Avg session length</div>
+      <div class="value" id="v-session-len">0:00</div>
+      <div class="sub">across all devices <span class="delta" id="d-len">+0%</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">Conversion rate</div>
+      <div class="value" data-counter data-target="0" data-decimals="2"><span class="unit">%</span></div>
+      <div class="sub">form submits · sessions <span class="delta" id="d-conv">+0%</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">Top product · views</div>
+      <div class="value" id="v-top-sku" style="font-size:24px; line-height:1.2; font-feature-settings:normal;">—</div>
+      <div class="sub" id="v-top-sku-sub">awaiting data</div>
+    </div>
+  </section>
+
+  <!-- ============ Section: Funnel + Hourly heatmap ============ -->
+  <section class="row two-by">
+
+    <article class="panel in" style="animation-delay: 240ms">
+      <div class="panel-head">
+        <div>
+          <h1 class="eyebrow">Section 1 · Conversion</h1>
+          <h2 class="section-head">From session to inquiry, in five steps</h2>
+          <p class="section-sub">
+            The drop-off between each stage is where the storefront earns or loses
+            its visitor. Three of these five events do not yet exist in the live
+            tracker: instrumenting <span class="font-mono">product_view</span>,
+            <span class="font-mono">add_to_cart</span>, and
+            <span class="font-mono">form_submit</span> is what unlocks this view.
+          </p>
+        </div>
+        <div class="right"><span class="pill">5 stages</span></div>
+      </div>
+      <div id="chart-funnel" class="chart tall"></div>
+      <div class="note">
+        <strong>Note.</strong> "Form submits" treats the Send Inquiry click as the
+        conversion. If the real definition is downstream — quote sent, deal closed —
+        the same chart shows that instead by swapping the final stage. Easy to redefine later.
+      </div>
+    </article>
+
+    <article class="panel in" style="animation-delay: 320ms">
+      <div class="panel-head">
+        <div>
+          <h1 class="eyebrow">Section 2 · Rhythm</h1>
+          <h2 class="section-head">When people show up</h2>
+          <p class="section-sub">
+            Day-of-week × hour-of-day. Bright cells are when the storefront earns
+            attention. Newsletter pushes and Mayo intranet posts show up here as
+            sharp horizontal bands.
+          </p>
+        </div>
+      </div>
+      <div id="chart-hourly" class="chart tall"></div>
+    </article>
+  </section>
+
+  <!-- ============ Section: Top events + Devices ============ -->
+  <section class="row two-by">
+
+    <article class="panel in" style="animation-delay: 400ms">
+      <div class="panel-head">
+        <div>
+          <h1 class="eyebrow">Section 3 · Activity mix</h1>
+          <h2 class="section-head">What visitors actually do</h2>
+          <p class="section-sub">
+            Event counts across the 30-day window. Scroll events have been
+            sampled to milestone depths (25 / 50 / 75 / 100%) so they no longer
+            drown out the signal events.
+          </p>
+        </div>
+      </div>
+      <div id="chart-events" class="chart"></div>
+      <div class="note coral">
+        <strong>Anomaly detected.</strong> A bot-shaped session cluster on
+        2026-04-26 (~14 sessions, scroll-only, headless Linux) accounts for
+        a measurable share of scroll events. Coral cells in the rhythm chart
+        mark its appearance.
+      </div>
+    </article>
+
+    <article class="panel in" style="animation-delay: 480ms">
+      <div class="panel-head">
+        <div>
+          <h1 class="eyebrow">Section 4 · Audience</h1>
+          <h2 class="section-head">Where they're reading from</h2>
+          <p class="section-sub">
+            Device split for the same window. Healthcare staff browse on
+            their phones at lunch; desktop sessions cluster mid-morning.
+          </p>
+        </div>
+      </div>
+      <div id="chart-devices" class="chart"></div>
+    </article>
+  </section>
+
+  <!-- ============ Section: Scroll depth (full) ============ -->
+  <section class="row full">
+    <article class="panel in" style="animation-delay: 560ms">
+      <div class="panel-head">
+        <div>
+          <h1 class="eyebrow">Section 5 · Engagement depth</h1>
+          <h2 class="section-head">How far down each page they read</h2>
+          <p class="section-sub">
+            Per page, the share of sessions that reached 25, 50, 75, and 100%
+            scroll depth. Pages where most visitors bail before the 50% mark
+            need either shorter content or a stronger call-to-action above the fold.
+          </p>
+        </div>
+        <div class="right"><span class="pill">Top 6 pages</span></div>
+      </div>
+      <div id="chart-scroll" class="chart tall"></div>
+    </article>
+  </section>
+
+  <!-- ============ Section: Live recent events ============ -->
+  <section class="row full">
+    <article class="panel in" style="animation-delay: 640ms">
+      <div class="panel-head">
+        <div>
+          <h1 class="eyebrow">Section 6 · Live</h1>
+          <h2 class="section-head">
+            Recent activity
+            <span style="display:inline-block; vertical-align:middle; margin-left:10px; width:8px; height:8px; background:var(--accent); border-radius:50%; animation: pulse 1800ms ease-in-out infinite;"></span>
+          </h2>
+          <p class="section-sub">
+            The 20 most recent events as they hit the sheet. The same view your
+            storefront's "Recent Events" panel shows visitors today, evolved
+            into the dashboard.
+          </p>
+        </div>
+        <div class="right"><span class="pill" id="feed-clock">—</span></div>
+      </div>
+      <ul class="feed" id="feed"></ul>
+    </article>
+  </section>
+
+  <!-- ============ Footer ============ -->
+  <footer class="foot">
+    <div>
+      Prototype · <span class="font-mono">v0.1</span> · synthetic data, real schema · not connected to live sheet
+    </div>
+    <div>Built for richa · 2026-04-29</div>
+  </footer>
+
+</main>
+
+<!-- ECharts -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
